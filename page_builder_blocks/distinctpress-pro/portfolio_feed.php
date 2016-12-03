@@ -19,8 +19,12 @@ function distinctpress_portfolio_feed_block() {
                         'label' => 'Portfolio Feed Layout',
                         'type' => 'select',
                         'options' => array(
-                             'portfolio-grid' => 'Portfolio Grid',
+                             'portfolio-grid' => 'Portfolio Grid (2 Columns)',
                              'portfolio-grid-3-col' => 'Portfolio Grid (3 Columns)',
+                             'portfolio-grid-4-col' => 'Portfolio Grid (4 Columns)',
+                             'portfolio-lightbox-grid' => 'Portfolio Grid Lightbox (2 Columns)',
+                             'portfolio-lightbox-grid-3-col' => 'Portfolio Lightbox Grid (3 Columns)',
+                             'portfolio-lightbox-grid-4-col' => 'Portfolio Lightbox Grid (4 Columns)',
                         ),
                         'value' => 'portfolio-grid-3-col',
                         'description' => 'Choose how you wish to display your news.',
@@ -93,30 +97,34 @@ function portfolio_feed_layout_shortcode($atts, $content = null){
 
     $blog_query = new WP_Query ( $args ); ?>
 
-    <?php if($show_filters == 'show') { ?>
-    <div class="portfolio-filter">
-      <ul>
-        <li id="filter--all" class="filter active" data-filter="*"><?php _e( 'View All', 'distinctpress' ); ?></li>
-        <?php 
-          $taxonomy = 'jetpack-portfolio-type';
-          $tax_terms = get_terms( $taxonomy ); 
-          foreach ( $tax_terms as $tax_term ) { ?>
-            <li class="filter" data-filter=".<?php echo $tax_term->slug; ?>"><?php echo $tax_term->slug; ?></li>
-          <?php 
-          } 
-          wp_reset_postdata(); ?>
-      </ul>
-    </div>
-    <?php } ?>
+    <div class="isotope-portfolio">
 
-    <div class="portfolio row">
-    <?php 
-    if ( $blog_query -> have_posts() ) :        
-        while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
-            get_template_part( 'content/content-' . $portfolio_feed_layout );
-        endwhile;         
-    endif;  
-    ?>      
+      <?php if($show_filters == 'show') { ?>
+      <div class="portfolio-filter">
+        <ul>
+          <li id="filter--all" class="filter active" data-filter="*"><?php _e( 'View All', 'distinctpress' ); ?></li>
+          <?php 
+            $taxonomy = 'jetpack-portfolio-type';
+            $tax_terms = get_terms( $taxonomy ); 
+            foreach ( $tax_terms as $tax_term ) { ?>
+              <li class="filter" data-filter=".<?php echo $tax_term->slug; ?>"><?php echo $tax_term->slug; ?></li>
+            <?php 
+            } 
+            wp_reset_postdata(); ?>
+        </ul>
+      </div>
+      <?php } ?>
+
+      <div class="portfolio row">
+      <?php 
+      if ( $blog_query -> have_posts() ) :        
+          while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
+              get_template_part( 'content/content-' . $portfolio_feed_layout );
+          endwhile;         
+      endif;  
+      ?>      
+      </div>
+
     </div>
     <?php
 }
