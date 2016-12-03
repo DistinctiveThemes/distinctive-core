@@ -15,6 +15,11 @@ define( 'DISTINCTIVE_CORE_PATH', trailingslashit(plugin_dir_path(__FILE__)) );
 define( 'DISTINCTIVE_CORE_VERSION', '1.0');
 
 /**
+ * Grab all custom post type functions
+ */
+require_once( DISTINCTIVE_CORE_PATH . 'core_cpts.php' );
+
+/**
  * Everything else in the framework is conditionally loaded depending on theme options.
  * Let's include all of that now.
  */
