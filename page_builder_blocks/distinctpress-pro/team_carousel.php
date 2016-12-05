@@ -81,7 +81,7 @@ function team_carousel_layout_shortcode($atts, $content = null){
 
     $blog_query = new WP_Query ( $args ); ?>
 
-    <div class="slick-carousel dots-inner slide entry-featured-image row" data-slick='{"slidesToShow": 3 , "dots": true, "arrows": false, "adaptiveHeight": true, "autoplay": false}'>      
+    <div class="slick-carousel dots-inner slide entry-featured-image" data-slick='{"slidesToShow": 3 , "dots": true, "arrows": false, "adaptiveHeight": true, "autoplay": false}' data-items-1024-down="2" data-items-600-down="2" data-items-480-down="1">      
 
     <?php
     if ( $blog_query -> have_posts() ) :
