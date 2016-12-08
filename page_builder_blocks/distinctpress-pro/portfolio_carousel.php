@@ -81,7 +81,7 @@ function portfolio_carousel_layout_shortcode($atts, $content = null){
 
     $blog_query = new WP_Query ( $args ); ?>
 
-    <div class="slick-carousel dots-inner slide entry-featured-image" data-slick='{"slidesToShow": 3 , "dots": true, "arrows": false, "adaptiveHeight": true, "autoplay": false}'>      
+    <div class="slick-carousel dots-inner slide drag-icon" data-slick='{"slidesToShow": 3 , "dots": false, "arrows": true, "adaptiveHeight": true, "autoplay": false}'>      
 
     <?php
     if ( $blog_query -> have_posts() ) :

@@ -22,7 +22,7 @@ function distinctpress_portfolio_feed_block() {
                              'portfolio-grid' => 'Portfolio Grid (2 Columns)',
                              'portfolio-grid-3-col' => 'Portfolio Grid (3 Columns)',
                              'portfolio-grid-4-col' => 'Portfolio Grid (4 Columns)',
-                             'portfolio-lightbox-grid' => 'Portfolio Grid Lightbox (2 Columns)',
+                             'portfolio-lightbox-grid' => 'Portfolio Lightbox Grid (2 Columns)',
                              'portfolio-lightbox-grid-3-col' => 'Portfolio Lightbox Grid (3 Columns)',
                              'portfolio-lightbox-grid-4-col' => 'Portfolio Lightbox Grid (4 Columns)',
                         ),
