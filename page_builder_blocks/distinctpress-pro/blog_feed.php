@@ -21,6 +21,8 @@ function distinctpress_blog_feed_block() {
                         'options' => array(
                              'post-grid' => 'Post Grid',
                              'post-grid-3-col' => 'Post Grid (3 Columns)',
+                             'post-grid-minimal' => 'Post Grid Minimal',
+                             'post-grid-3-col-minimal' => 'Post Grid Minimal (3 Columns)',
                              'post-list' => 'Post List',
                         ),
                         'value' => 'post-grid',
@@ -86,14 +88,22 @@ function blog_feed_layout_shortcode($atts, $content = null){
 
     $blog_query = new WP_Query ( $args );
 
-    $output = '';
+    ob_start(); ?>
 
-    if ( $blog_query -> have_posts() ) :
+    <div class="clear-me row">
+
+    <?php if ( $blog_query -> have_posts() ) :
         while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
-              $output .= get_template_part( 'content/content-' . $blog_feed_layout );
+               get_template_part( 'content/content-' . $blog_feed_layout );
         endwhile; 
-    endif;   
-   
+    endif; ?> 
+
+    </div> 
+
+    <?php $output = ob_get_contents();
+
+    ob_end_clean();
+
     return $output;
 }
 

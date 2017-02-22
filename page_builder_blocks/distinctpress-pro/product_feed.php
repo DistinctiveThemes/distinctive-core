@@ -1,46 +1,47 @@
 <?php
 
 /* ADD OUR BLOCKS */
-add_action('init', 'distinctpress_portfolio_carousel_block', 99 );
+add_action('init', 'distinctpress_product_feed_block', 99 );
 
 // BLOG FEED
-function distinctpress_portfolio_carousel_block() { 
+function distinctpress_product_feed_block() { 
   if (function_exists('kc_add_map')) { 
-
       $args = array(
         'orderby'                  => 'name',
         'hide_empty'               => 0,
         'hierarchical'             => 1,
-        'taxonomy'                 => 'portfolio-category'
+        'taxonomy'                 => 'product_cat'
       );
       $cats = get_categories( $args );
       $final_cats = array( 'all' => 'Show all categories' );      
       foreach( $cats as $cat ){
         $final_cats[$cat->term_id] = $cat->name;
       }
-      
+
       kc_add_map(
           array( 
-              'portfolio_carousel_layout' => array(
-                  'name' => __('Portfolio Carousel', 'distinctpress'),
-                  'description' => __('Display a feed of your projects.', 'distinctpress'),
+              'product_feed_layout' => array(
+                  'name' => __('Product Feed', 'distinctpress'),
+                  'description' => __('Display a recent feed of your shop items.', 'distinctpress'),
                   'icon' => 'dt-block-icon',
                   'category' => 'DistinctPress',
                   'params' => array(
                       array(
-                        'name' => 'portfolio_carousel_layout',
-                        'label' => 'Portfolio Carousel Layout',
+                        'name' => 'product_feed_layout',
+                        'label' => 'Product Feed Layout',
                         'type' => 'select',
                         'options' => array(
-                             'portfolio-grid' => 'Portfolio Grid',
-                             'portfolio-lightbox-grid' => 'Portfolio Grid Lightbox',
+                             'product-grid' => 'Product Grid',
+                             'product-grid-3-col' => 'Product Grid (3 Columns)',
+                             'product-grid-minimal' => 'Product Grid Minimal',
+                             'product-grid-3-col-minimal' => 'Product Grid Minimal (3 Columns)',
                         ),
-                        'value' => 'portfolio-grid',
-                        'description' => 'Choose how you wish to display your projects.',
+                        'value' => 'product-grid',
+                        'description' => 'Choose how you wish to display your news.',
                         'admin_label' => true,
                       ),
                       array(
-                          'name' => 'category_filter',
+                          'name' => 'post_filter',
                           'label' => 'Which Categories To Display?',
                           'type' => 'select', 
                           'options' => $final_cats,
@@ -60,48 +61,53 @@ function distinctpress_portfolio_carousel_block() {
   }  
 }  
 
-function portfolio_carousel_layout_shortcode($atts, $content = null){
+function product_feed_layout_shortcode($atts, $content = null){
     extract( shortcode_atts( array(
-        'portfolio_carousel_layout' => 'portfolio-grid',   
-        'category_filter' => 'all'  ,
+        'product_feed_layout' => 'product-grid-3-col',   
+        'post_filter' => 'all'  ,
         'number_of_posts' => '6'  
     ), $atts) );
 
     $args = array(
-        'post_type'      => 'portfolio',
+        'post_type'      => 'product',
         'posts_per_page' => $number_of_posts,
     );
 
-    if (!( $category_filter == 'all' )) {
+    if (!( $post_filter == 'all' )) {
       if( function_exists( 'icl_object_id' ) ){
-        $category_filter = (int)icl_object_id( $category_filter, 'portfolio-category', true);
+        $post_filter = (int)icl_object_id( $post_filter, 'product_cat', true);
       }
       $args['tax_query'] = array(
         array(
-          'taxonomy' => 'portfolio-category',
+          'taxonomy' => 'product_cat',
           'field' => 'id',
-          'terms' => $category_filter
+          'terms' => $post_filter
         )
       );
     }
 
-    $blog_query = new WP_Query ( $args ); ?>
 
-    <div class="slick-carousel dots-inner slide drag-icon" data-slick='{"slidesToShow": 3 , "dots": false, "arrows": true, "adaptiveHeight": true, "autoplay": false}'>      
+    $blog_query = new WP_Query ( $args );
 
-    <?php
-    if ( $blog_query -> have_posts() ) :
+    ob_start(); ?>
+
+    <div class="clear-me row">
+
+    <?php if ( $blog_query -> have_posts() ) :
         while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
-              get_template_part( 'content/content-' . $portfolio_carousel_layout );
+               get_template_part( 'content/content-' . $product_feed_layout );
         endwhile; 
-    endif;   
-    ?>
+    endif; ?> 
 
-    </div>
+    </div> 
 
-    <?php
+    <?php $output = ob_get_contents();
+
+    ob_end_clean();
+
+    return $output;
 }
 
-add_shortcode('portfolio_carousel_layout', 'portfolio_carousel_layout_shortcode'); 
+add_shortcode('product_feed_layout', 'product_feed_layout_shortcode'); 
 
 ?>

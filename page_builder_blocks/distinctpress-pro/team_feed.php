@@ -20,7 +20,7 @@ function distinctpress_team_feed_block() {
                         'type' => 'select',
                         'options' => array(
                              'team-grid' => 'Team Grid',
-                             'team-grid-alt' => 'Team Grid (Alt Style)',
+                             'team-grid-minimal' => 'Team Grid Minimal',
                         ),
                         'value' => 'team-grid',
                         'description' => 'Choose how you wish to display your team.',
@@ -81,15 +81,24 @@ function team_feed_layout_shortcode($atts, $content = null){
 
     $blog_query = new WP_Query ( $args );
 
-    $output = '';
+    ob_start(); ?>
 
-    if ( $blog_query -> have_posts() ) :
+    <div class="clear-me row">
+
+    <?php if ( $blog_query -> have_posts() ) :
         while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
-              $output .= get_template_part( 'content/content-' . $team_feed_layout );
+               get_template_part( 'content/content-' . $team_feed_layout );
         endwhile; 
-    endif;   
-   
+    endif; ?> 
+
+    </div> 
+
+    <?php $output = ob_get_contents();
+
+    ob_end_clean();
+
     return $output;
+
 }
 
 add_shortcode('team_feed_layout', 'team_feed_layout_shortcode'); 

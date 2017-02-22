@@ -20,7 +20,8 @@ function distinctpress_blog_carousel_block() {
                         'type' => 'select',
                         'options' => array(
                              'post-grid' => 'Blog Grid',
-                             'post-grid-alt' => 'Blog Grid (Alt Style)',
+                             'post-grid-minimal' => 'Blog Grid Minimal',
+                             'post-grid-minimal-no-padding' => 'Blog Grid Minimal (No Padding)',
                         ),
                         'value' => 'blog-grid',
                         'description' => 'Choose how you wish to display your team.',
@@ -57,19 +58,23 @@ function blog_carousel_layout_shortcode($atts, $content = null){
         'posts_per_page' => $number_of_posts,
     );
 
-    $myArray = explode(',', $post_filter);
-
-    $filters = array();
-
-    foreach ($myArray as $filter) {
-        $filter = str_replace('post:', '', $filter);
-        $idObj = get_category_by_slug($filter); 
-        $id = $idObj->term_id;
-
-        $filters[] = $id;
+    if(empty($post_filter)) {
+      $post_filter = 'all';
     }
 
     if (!( $post_filter == 'all' )) {
+      $myArray = explode(',', $post_filter);
+
+      $filters = array();
+
+      foreach ($myArray as $filter) {
+          $filter = str_replace('post:', '', $filter);
+          $idObj = get_category_by_slug($filter); 
+          $id = $idObj->term_id;
+
+          $filters[] = $id;
+      }
+
       if( function_exists( 'icl_object_id' ) ){
         $post_filter = (int)icl_object_id( $post_filter, 'category', true);
       }
@@ -82,21 +87,27 @@ function blog_carousel_layout_shortcode($atts, $content = null){
       );
     }
 
-    $blog_query = new WP_Query ( $args ); ?>
+    $blog_query = new WP_Query ( $args ); 
 
-    <div class="slick-carousel dots-inner slide entry-featured-image row" data-slick='{"slidesToShow": 3 , "dots": true, "arrows": false, "adaptiveHeight": true, "autoplay": false}'>      
+    ob_start(); ?>
 
-    <?php
-    if ( $blog_query -> have_posts() ) :
-        while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
-              get_template_part( 'content/content-post-grid' );
-        endwhile; 
-    endif;   
-    ?>
+    <div class="clear-me row">
+      <div class="slick-carousel dots-inner slide entry-featured-image" data-slick='{"slidesToShow": 3 , "dots": false, "arrows": true, "adaptiveHeight": false, "autoplay": true}'>  
 
-    </div>
+      <?php if ( $blog_query -> have_posts() ) :
+          while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
+                 get_template_part( 'content/content-' . $blog_carousel_layout );
+          endwhile; 
+      endif; ?> 
 
-    <?php
+      </div> 
+    </div> 
+
+    <?php $output = ob_get_contents();
+
+    ob_end_clean();
+
+    return $output; 
 }
 
 add_shortcode('blog_carousel_layout', 'blog_carousel_layout_shortcode'); 

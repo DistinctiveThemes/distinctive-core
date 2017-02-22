@@ -20,7 +20,7 @@ function distinctpress_team_carousel_block() {
                         'type' => 'select',
                         'options' => array(
                              'team-grid' => 'Team Grid',
-                             'team-grid-alt' => 'Team Grid (Alt Style)',
+                             'team-grid-minimal' => 'Team Grid Minimal',
                         ),
                         'value' => 'team-grid',
                         'description' => 'Choose how you wish to display your team.',

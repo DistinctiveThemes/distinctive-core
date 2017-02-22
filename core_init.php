@@ -1,9 +1,11 @@
-<?php 
+<?php
+
 /**
  * Grab our framework options as registered by the theme.
  * If ebor_framework_options isn't set then we'll pull a list of defaults.
  * By default everything is turned off.
  */
+
 $defaults = array(
 	'portfolio_post_type'   => '0',
 	'team_post_type'        => '0',
@@ -49,5 +51,7 @@ if( '1' == $framework_options['testimonial_post_type'] ){
 		add_action( 'init', 'register_testimonials_post_type' );
 		add_action( 'init', 'create_testimonial_taxonomies');
 }
+
+require_once( DISTINCTIVE_CORE_PATH . 'demo-import/one-click-demo-import.php' );	
 
 ?>

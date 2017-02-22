@@ -6,6 +6,18 @@ add_action('init', 'distinctpress_portfolio_feed_block', 99 );
 // BLOG FEED
 function distinctpress_portfolio_feed_block() { 
   if (function_exists('kc_add_map')) { 
+      $args = array(
+        'orderby'                  => 'name',
+        'hide_empty'               => 0,
+        'hierarchical'             => 1,
+        'taxonomy'                 => 'portfolio-category'
+      );
+      $cats = get_categories( $args );
+      $final_cats = array( 'all' => 'Show all categories' );      
+      foreach( $cats as $cat ){
+        $final_cats[$cat->term_id] = $cat->name;
+      }
+
       kc_add_map(
           array( 
               'portfolio_feed_layout' => array(
@@ -42,10 +54,12 @@ function distinctpress_portfolio_feed_block() {
                         'admin_label' => true,
                       ),
                       array(
-                        'name' => 'post_filter',
-                        'label' => 'Post Categories',
-                        'type' => 'post_taxonomy',
-                        'description' => '',
+                          'name' => 'category_filter',
+                          'label' => 'Which Categories To Display?',
+                          'type' => 'select', 
+                          'options' => $final_cats,
+                          'value' => 'all', 
+                          'description' => 'Choose a category to display',
                       ),
                       array(
                           'name' => 'number_of_posts',
@@ -63,59 +77,53 @@ function distinctpress_portfolio_feed_block() {
 function portfolio_feed_layout_shortcode($atts, $content = null){
     extract( shortcode_atts( array(
         'portfolio_feed_layout' => 'portfolio-grid-3-col',   
-        'post_filter' => 'all'  ,
+        'category_filter' => 'all'  ,
         'number_of_posts' => '6',
         'show_filters' => 'show'  
     ), $atts) );
 
     $args = array(
-        'post_type'      => 'jetpack-portfolio',
+        'post_type'      => 'portfolio',
         'posts_per_page' => $number_of_posts,
     );
 
-    $taxonomy = 'jetpack-portfolio-type';
-    $tax_terms = get_terms( $taxonomy );
-
-    $filters = array();
-
-    foreach ( $tax_terms as $tax_term ) {
-      $filters[] = $tax_term->term_id;
-    }
-
-    if (!( $post_filter == 'all' )) {
+    if (!( $category_filter == 'all' )) {
       if( function_exists( 'icl_object_id' ) ){
-        $post_filter = (int)icl_object_id( $post_filter, 'category', true);
+        $category_filter = (int)icl_object_id( $category_filter, 'portfolio-category', true);
       }
       $args['tax_query'] = array(
         array(
-          'taxonomy' => 'jetpack-portfolio-type',
+          'taxonomy' => 'portfolio-category',
           'field' => 'id',
-          'terms' => $filters
+          'terms' => $category_filter
         )
       );
     }
 
     $blog_query = new WP_Query ( $args ); ?>
 
+    <?php
+      if( $category_filter == 'all' ){
+        $cats = get_categories('taxonomy=portfolio-category');
+      } else {
+        $cats = get_categories('taxonomy=portfolio-category&exclude='. $category_filter .'&child_of='. $filter);
+      }
+    ?>
+
     <div class="isotope-portfolio">
 
       <?php if($show_filters == 'show') { ?>
       <div class="portfolio-filter">
         <ul>
-          <li id="filter--all" class="filter active" data-filter="*"><?php _e( 'View All', 'distinctpress' ); ?></li>
-          <?php 
-            $taxonomy = 'jetpack-portfolio-type';
-            $tax_terms = get_terms( $taxonomy ); 
-            foreach ( $tax_terms as $tax_term ) { ?>
-              <li class="filter" data-filter=".<?php echo $tax_term->slug; ?>"><?php echo $tax_term->slug; ?></li>
-            <?php 
-            } 
-            wp_reset_postdata(); ?>
+            <li id="filter--all" class="filter active" data-filter="*"><?php _e( 'View All', 'distinctpress' ); ?></li>
+            <?php foreach ($cats as $cat ) : ?>
+                <li class="filter" data-filter=".<?php echo esc_attr($cat->slug); ?>"><?php echo esc_attr($cat->name); ?></li>
+            <?php endforeach; ?>
         </ul>
       </div>
       <?php } ?>
 
-      <div class="portfolio row">
+      <div class="portfolio-items">
       <?php 
       if ( $blog_query -> have_posts() ) :        
           while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
@@ -127,6 +135,8 @@ function portfolio_feed_layout_shortcode($atts, $content = null){
 
     </div>
     <?php
+
+    wp_reset_postdata();
 }
 
 add_shortcode('portfolio_feed_layout', 'portfolio_feed_layout_shortcode'); 
