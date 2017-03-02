@@ -1,10 +1,10 @@
 <?php
 
 /* ADD OUR BLOCKS */
-add_action('init', 'distinctpress_contact_form_7_block', 99 );
+add_action('init', 'distinctpress_revslider_block', 99 );
 
 // BLOG FEED
-function distinctpress_contact_form_7_block() { 
+function distinctpress_revslider_block() { 
   global $post;
   $post_type = 'wpcf7_contact_form';
 
@@ -24,21 +24,32 @@ function distinctpress_contact_form_7_block() {
     $form_array[$post->ID] = htmlspecialchars($post->post_title);
   }
 
+  if ( class_exists( 'RevSlider' ) ) {
+      $rev_slider = new RevSlider();
+      $sliders = $rev_slider->getAllSliderAliases();
+  } else {
+      $sliders = array();
+  }
+
+  foreach( $sliders as $slider => $alias) { 
+    $slider_array[$alias] = htmlspecialchars($alias);
+  }
+
   if (function_exists('kc_add_map')) { 
       kc_add_map(
           array( 
-              'contact_form_7_layout' => array(
-                  'name' => __('Contact Form 7', 'distinctpress'),
+              'revslider_layout' => array(
+                  'name' => __('Revolution Slider', 'distinctpress'),
                   'icon' => 'dt-block-icon',
                   'category' => 'DistinctPress',
                   'params' => array(
                       array(
-                        'name' => 'contact_form_7_layout',
-                        'label' => 'Contact Form 7',
+                        'name' => 'revslider_layout',
+                        'label' => 'Revolution Slider',
                         'type' => 'select',
-                        'options' => $form_array,
+                        'options' => $slider_array,
                         'value' => 'post-grid',
-                        'description' => 'Choose how you wish to display your news.',
+                        'description' => 'Choose a slider to display',
                         'admin_label' => true,
                       ),
                   )
@@ -48,18 +59,18 @@ function distinctpress_contact_form_7_block() {
   }  
 }  
 
-function contact_form_7_layout_shortcode($atts, $content = null){
+function revslider_layout_shortcode($atts, $content = null){
     extract( shortcode_atts( array(
-        'contact_form_7_layout' => '',   
+        'revslider_layout' => '',   
     ), $atts) );
 
     $output = '';
 
-    $output .= do_shortcode('[contact-form-7 id="'.$contact_form_7_layout.'"]');
+    $output .= do_shortcode('[rev_slider alias="'.$revslider_layout.'"]');
 
     return $output;
 }
 
-add_shortcode('contact_form_7_layout', 'contact_form_7_layout_shortcode'); 
+add_shortcode('revslider_layout', 'revslider_layout_shortcode'); 
 
 ?>

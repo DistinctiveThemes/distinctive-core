@@ -99,7 +99,7 @@ function portfolio_carousel_layout_shortcode($atts, $content = null){
 
     </div>
 
-    <?php
+    <?php wp_reset_postdata();
 }
 
 add_shortcode('portfolio_carousel_layout', 'portfolio_carousel_layout_shortcode'); 

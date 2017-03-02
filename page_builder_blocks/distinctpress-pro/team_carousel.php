@@ -94,6 +94,8 @@ function team_carousel_layout_shortcode($atts, $content = null){
     </div>
 
     <?php
+
+    wp_reset_postdata();
 }
 
 add_shortcode('team_carousel_layout', 'team_carousel_layout_shortcode'); 

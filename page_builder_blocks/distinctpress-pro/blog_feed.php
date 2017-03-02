@@ -100,7 +100,11 @@ function blog_feed_layout_shortcode($atts, $content = null){
 
     </div> 
 
-    <?php $output = ob_get_contents();
+    <?php 
+
+    wp_reset_postdata();
+
+    $output = ob_get_contents();
 
     ob_end_clean();
 

@@ -92,7 +92,7 @@ function blog_carousel_layout_shortcode($atts, $content = null){
     ob_start(); ?>
 
     <div class="clear-me row">
-      <div class="slick-carousel dots-inner slide entry-featured-image" data-slick='{"slidesToShow": 3 , "dots": false, "arrows": true, "adaptiveHeight": false, "autoplay": true}'>  
+      <div class="slick-carousel dots-inner slide entry-featured-image" data-items-1024-down="2" data-items-600-down="2" data-items-480-down="1" data-slick='{"slidesToShow": 3 , "dots": false, "arrows": true, "adaptiveHeight": false, "autoplay": true}'>  
 
       <?php if ( $blog_query -> have_posts() ) :
           while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
@@ -103,7 +103,11 @@ function blog_carousel_layout_shortcode($atts, $content = null){
       </div> 
     </div> 
 
-    <?php $output = ob_get_contents();
+    <?php 
+
+    wp_reset_postdata();
+
+    $output = ob_get_contents();
 
     ob_end_clean();
 
