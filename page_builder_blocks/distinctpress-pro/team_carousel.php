@@ -79,7 +79,9 @@ function team_carousel_layout_shortcode($atts, $content = null){
       );
     }
 
-    $blog_query = new WP_Query ( $args ); ?>
+    $blog_query = new WP_Query ( $args ); 
+
+    ob_start(); ?>
 
     <div class="slick-carousel dots-inner slide entry-featured-image" data-slick='{"slidesToShow": 3 , "dots": true, "arrows": false, "adaptiveHeight": true, "autoplay": false}' data-items-1024-down="2" data-items-600-down="2" data-items-480-down="1">      
 
@@ -96,6 +98,12 @@ function team_carousel_layout_shortcode($atts, $content = null){
     <?php
 
     wp_reset_postdata();
+
+    $output = ob_get_contents();
+
+    ob_end_clean();
+
+    return $output;
 }
 
 add_shortcode('team_carousel_layout', 'team_carousel_layout_shortcode'); 
