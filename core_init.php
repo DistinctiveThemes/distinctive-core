@@ -54,4 +54,23 @@ if( '1' == $framework_options['testimonial_post_type'] ){
 
 require_once( DISTINCTIVE_CORE_PATH . 'demo-import/one-click-demo-import.php' );	
 
+/* 
+MCE Buttons 
+*/
+add_action( 'init', 'distinctivecore_shortcode_button' );
+function distinctivecore_shortcode_button() {
+    add_filter("mce_external_plugins", "distinctivecore_shortcode_add_buttons");
+    add_filter('mce_buttons', 'distinctivecore_shortcode_register_buttons');
+}
+
+function distinctivecore_shortcode_add_buttons($plugin_array) {
+    $plugin_array['distinctivecore_shortcode'] = plugins_url( '/assets/js/shortcode-mce', __FILE__ );
+    return $plugin_array;
+}
+
+function distinctivecore_shortcode_register_buttons($buttons) {
+    array_push( $buttons, 'showrecent' ); // dropcap', 'recentposts
+    return $buttons;
+}
+
 ?>
