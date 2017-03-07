@@ -55,7 +55,7 @@ if( '1' == $framework_options['testimonial_post_type'] ){
 require_once( DISTINCTIVE_CORE_PATH . 'demo-import/one-click-demo-import.php' );	
 
 /* 
-MCE Buttons 
+MCE Buttons & SHORTCODES
 */
 add_action( 'init', 'distinctivecore_shortcode_button' );
 function distinctivecore_shortcode_button() {
@@ -64,13 +64,15 @@ function distinctivecore_shortcode_button() {
 }
 
 function distinctivecore_shortcode_add_buttons($plugin_array) {
-    $plugin_array['distinctivecore_shortcode'] = plugins_url( '/assets/js/shortcode-mce', __FILE__ );
+    $plugin_array['distinctivecore_shortcode'] = plugins_url( 'shortcodes/assets/js/shortcode-mce.js', __FILE__ );
     return $plugin_array;
 }
 
 function distinctivecore_shortcode_register_buttons($buttons) {
-    array_push( $buttons, 'showrecent' ); // dropcap', 'recentposts
+    array_push( $buttons, 'open_builder' ); // dropcap', 'recentposts
     return $buttons;
 }
+
+require_once( DISTINCTIVE_CORE_PATH . 'shortcodes/core_shortcodes.php' );	
 
 ?>

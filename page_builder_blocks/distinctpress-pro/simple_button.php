@@ -5,7 +5,7 @@ add_action('init', 'distinctpress_simple_button_block', 99 );
 
 // BLOG FEED
 function distinctpress_simple_button_block() { 
-  global $post;
+  
   $post_type = 'wpcf7_contact_form';
 
   $args = array (

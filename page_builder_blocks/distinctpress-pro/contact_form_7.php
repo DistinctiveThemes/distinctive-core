@@ -5,7 +5,7 @@ add_action('init', 'distinctpress_contact_form_7_block', 99 );
 
 // BLOG FEED
 function distinctpress_contact_form_7_block() { 
-  global $post;
+
   $post_type = 'wpcf7_contact_form';
 
   $args = array (
@@ -56,6 +56,8 @@ function contact_form_7_layout_shortcode($atts, $content = null){
     $output = '';
 
     $output .= do_shortcode('[contact-form-7 id="'.$contact_form_7_layout.'"]');
+
+    wp_reset_postdata();
 
     return $output;
 }

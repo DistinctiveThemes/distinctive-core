@@ -33,9 +33,11 @@ function comments_layout_shortcode($atts, $content = null){
         
     ), $atts) );
 
-    $output = '';
+    $output = '<div class="col-sm-12">';
 
-    $output .=comments_template( '', true );
+      $output .= comments_template( '', true );
+
+    $output .= '</div>';
 
     return $output;
 }

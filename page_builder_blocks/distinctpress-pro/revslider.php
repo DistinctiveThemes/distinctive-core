@@ -5,7 +5,7 @@ add_action('init', 'distinctpress_revslider_block', 99 );
 
 // BLOG FEED
 function distinctpress_revslider_block() { 
-  global $post;
+
   $post_type = 'wpcf7_contact_form';
 
   $args = array (
@@ -35,7 +35,7 @@ function distinctpress_revslider_block() {
     $slider_array[$alias] = htmlspecialchars($alias);
   }
 
-  if (function_exists('kc_add_map')) { 
+  if (function_exists('kc_add_map') && !empty($slider_array)) { 
       kc_add_map(
           array( 
               'revslider_layout' => array(
