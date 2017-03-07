@@ -53,6 +53,8 @@ if( '1' == $framework_options['testimonial_post_type'] ){
 }
 
 require_once( DISTINCTIVE_CORE_PATH . 'demo-import/one-click-demo-import.php' );	
+require_once( DISTINCTIVE_CORE_PATH . 'cmb2/init.php');
+require_once( DISTINCTIVE_CORE_PATH . 'cmb2/cmb2-attached-posts-field.php');
 
 /* 
 MCE Buttons & SHORTCODES
