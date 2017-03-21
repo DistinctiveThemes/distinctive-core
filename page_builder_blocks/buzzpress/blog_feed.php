@@ -25,6 +25,9 @@ function distinctpress_blog_feed_block() {
                              'post-grid-3-col-minimal' => 'Post Grid Minimal (3 Columns)',
                              'post-list' => 'Post List',
                              'post-cards-3-col' => 'Post Cards (3 Columns)',
+                             'post-mini-cards' => 'Post Mini Cards (1 Column)',                             
+                             'post-mini-cards-detailed' => 'Post Mini Cards + Excerpt (1 Column)',
+                             'post-micro-cards' => 'Post Cards 50/50 (1 Column)',
                         ),
                         'value' => 'post-grid',
                         'description' => 'Choose how you wish to display your news.',
@@ -42,6 +45,12 @@ function distinctpress_blog_feed_block() {
                           'type' => 'text', 
                           'value' => '9',
                       ),
+                      array(
+                          'name' => 'number_of_posts_offset',
+                          'label' => 'Number of Posts to Offset?',
+                          'type' => 'text', 
+                          'value' => '0',
+                      ),
                   )
               ), 
           )
@@ -53,12 +62,14 @@ function blog_feed_layout_shortcode($atts, $content = null){
     extract( shortcode_atts( array(
         'blog_feed_layout' => 'post-grid-3-col',   
         'post_filter' => 'all'  ,
-        'number_of_posts' => '6'  
+        'number_of_posts' => '6',
+        'number_of_posts_offset' => '0'  
     ), $atts) );
 
     $args = array(
         'post_type'      => 'post',
-        'posts_per_page' => $number_of_posts
+        'posts_per_page' => $number_of_posts,
+        'offset'         => $number_of_posts_offset
     );
 
     $myArray = explode(',', $post_filter);
