@@ -123,7 +123,7 @@ function blog_slider_layout_shortcode($atts, $content = null){
     <?php } else { ?>
 
     <div class="clear-me">
-      <div class="slick-carousel dots-inner slide entry-featured-image" data-items-1024-down="1" data-items-600-down="1" data-items-480-down="1" data-slick='{"slidesToShow": 1 , "dots": true, "arrows": false, "adaptiveHeight": false, "autoplay": true}'>  
+      <div class="slick-carousel dots-inner slide entry-featured-image single-item-slider" data-items-1024-down="1" data-items-600-down="1" data-items-480-down="1" data-slick='{"slidesToShow": 1 , "dots": true, "arrows": false, "adaptiveHeight": false, "autoplay": true}'>  
 
       <?php if ( $blog_query -> have_posts() ) :
           while ( $blog_query -> have_posts() ) : $blog_query -> the_post();
